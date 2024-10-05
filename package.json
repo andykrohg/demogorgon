@@ -1,4 +1,7 @@
 {
+  "commands": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "express": "^4.21.0",
     "mineflayer": "^4.20.0"

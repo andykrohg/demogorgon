@@ -1,10 +1,10 @@
 const mineflayer = require('mineflayer')
 
 const bot = mineflayer.createBot({
-  host: 'localhost',
+  host: process.env.MINECRAFT_SERVER_HOST || 'localhost',
   username: 'demogorgon',
   auth: 'offline',
-  port: 8080,
+  port: process.env.MINECRAFT_SERVER_PORT || 8080
 })
 
 // Log errors and kick reasons:
