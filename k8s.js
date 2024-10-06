@@ -1,7 +1,7 @@
 const k8s = require('@kubernetes/client-node');
 const fs = require('fs');
-const token = fs.readFileSync(process.cwd() + "/var/run/secrets/kubernetes.io/serviceaccount/token").toString();
-const namespace = fs.readFileSync(process.cwd() + "/var/run/secrets/kubernetes.io/serviceaccount/namespace").toString();
+const token = fs.readFileSync("/var/run/secrets/kubernetes.io/serviceaccount/token").toString();
+const namespace = fs.readFileSync("/var/run/secrets/kubernetes.io/serviceaccount/namespace").toString();
 
 const cluster = {
     name: 'internal-server',
