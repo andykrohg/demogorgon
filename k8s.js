@@ -6,6 +6,7 @@ const namespace = fs.readFileSync("/var/run/secrets/kubernetes.io/serviceaccount
 const cluster = {
     name: 'internal-server',
     server: 'https://kubernetes.default.svc',
+    skipTLSVerify: true
 };
 
 const user = {
