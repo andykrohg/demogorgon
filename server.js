@@ -1,5 +1,9 @@
 const mineflayer = require('mineflayer')
+const k8s = require('./k8s')
 
+/**
+ * Create a bot that will join the server
+ */
 const bot = mineflayer.createBot({
   host: process.env.MINECRAFT_SERVER_HOST || 'localhost',
   username: 'demogorgon',
@@ -43,12 +47,12 @@ app.get('/join', (req, res) => {
   if (req.session.botName) {
     console.log("Dude, you already have a bot!");
   } else {
-    console.log("thanks dude");
-    // TODO: create a new bot pod
-    req.session.botName = 'javathelo';
+    let name = k8s.createBot(req.query.name);
+    name.then((botName) => {
+        req.session.botName = botName;
+        res.send({botName: req.session.botName});
+    });
   }
-
-  res.send({botName: req.session.botName});
 })
 
 app.get('/', function(req, res){

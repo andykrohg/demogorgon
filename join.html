@@ -19,7 +19,7 @@
     <body>
         Welcome to Virtual AI Odyssey!<br/><br/>
         <form onsubmit="join(); return false;">
-            <input type="text" id="name" placeholder="Enter a username">
+            <input type="text" id="name" placeholder="Enter a username" required title="Up to 10 alphanumeric characters allowed" pattern="[a-zA-Z0-9]{1,10}"/>
             <input type="submit" value="Join"></input>
         </form>
     </body>
