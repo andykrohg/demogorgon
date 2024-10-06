@@ -6,7 +6,7 @@ USER root
 RUN npm install && \
     chown -R 1001:0 /app && \
     chmod -R g=u /app
-RUN curl https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.16/openshift-client-linux.tar.gz -o /tmp/oc.tar.gz && \
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.16/openshift-client-linux.tar.gz -o /tmp/oc.tar.gz && \
     tar xvzf /tmp/oc.tar.gz -C /usr/local/bin oc
 USER 1001
 

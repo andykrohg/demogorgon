@@ -1,0 +1,23 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  generateName: mindcraft-bot-
+spec:
+  restartPolicy: Always
+  serviceAccountName: default
+  priority: 0
+  containers:
+    - resources: {}
+      name: mindcraft
+      ports: []
+      imagePullPolicy: IfNotPresent
+      image: quay.io/akrohg/mindcraft:latest
+      env:
+        - name: MINECRAFT_SERVER_HOST
+          value: "minecraft-server"
+        - name: MINECRAFT_SERVER_PORT
+          value: "8080"
+        - name: MODEL_SERVER_ENDPOINT
+          value: "https://mistral-demojam.apps.aromero.sandbox2799.opentlc.com"
+        - name: MODEL 
+          value: "mistralai/Codestral-22B-v0.1"
