@@ -12,19 +12,24 @@ bot.on('kicked', console.log)
 bot.on('error', console.log)
 
 const express = require('express')
+const session = require('express-session');
 const app = express()
 app.use(express.json());
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
 const port = 8082
 
 /**
- * Relay a message to a user's bot
- * format: { "botName": "botname", "message": "message" }
+ * Relay a message to a user's bot. The bot name will be retrieved from the user's session cookie.
+ * format: { "message": "message" }
  */
 app.post('/message', (req, res) => {
-  console.log(`new message: ${JSON.stringify(req.body)}`);
-
-  if (req.body.botName && req.body.message) {
-    bot.whisper(req.body.botName, req.body.message);
+  if (req.body.message && req.session.botName) {
+    console.log(`new message to ${req.session.botName}: ${req.body.message}`);
+    bot.whisper(req.session.botName, req.body.message);
   }
 
   res.send({"status": "ok"});
@@ -32,15 +37,27 @@ app.post('/message', (req, res) => {
 
 /** 
  * Schedule a new bot to join the server
- * format: {"name": "name", "uid": "uid"}
  */
-app.post('/join', (req, res) => {
-  console.log(`new request to join: ${JSON.stringify(req.body)}`);
+app.get('/join', (req, res) => {
+  console.log(`new request to join from ${JSON.stringify(req.query.name)}`);
+  if (req.session.botName) {
+    console.log("Dude, you already have a bot!");
+  } else {
+    console.log("thanks dude");
+    // TODO: create a new bot pod
+    req.session.botName = 'javathelo';
+  }
 
-  // TODO: implement join request
-
-  res.send({"status": "ok"});
+  res.send({botName: req.session.botName});
 })
+
+app.get('/', function(req, res){
+    if (req.session.botName) {
+        res.sendFile(__dirname + '/play.html');
+    } else {
+        res.sendFile(__dirname + '/join.html');
+    }
+});
 
 app.listen(port, () => {
   console.log(`Demogorgon listening... always listening on port ${port}`)
