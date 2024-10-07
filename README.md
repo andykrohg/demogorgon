@@ -1,7 +1,18 @@
 # Demogorgon
-Server relay for a multi-mineflayer bot environment.
+Server relay for a multi-mindcraft bot environment. This project also provides a frontend for users to join a game and transmit messages to their bot.
 
-Start the server like this:
+## Prerequisites
+* NodeJS 18
+* A Kubernetes cluster (tested with OpenShift 4.16)
+* A Minecraft server (tested with 1.19.4)
+
+## Running the server
+At the moment, it's only supported to run this server on a Kubernetes cluster, since access to an internal Kubernetes service is expected.
+
+You can deploy it to OpenShift like this:
 ```bash
-node server.js
+oc new-app -e MINECRAFT_SERVER_HOST=minecraft-server -e MINECRAFT_SERVER_PORT=8080 quay.io/akrohg/demogorgon
+oc expose svc/demogorgon
 ```
+
+Then open the route in your browser.
