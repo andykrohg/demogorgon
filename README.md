@@ -13,6 +13,9 @@ You can deploy it to OpenShift like this:
 ```bash
 oc new-app -e MINECRAFT_SERVER_HOST=minecraft-server -e MINECRAFT_SERVER_PORT=8080 quay.io/akrohg/demogorgon
 oc expose svc/demogorgon
+
+# demogorgon needs edit privileges to be able to spawn pods in its namespace
+oc adm policy add-role-to-user edit -z default
 ```
 
 Then open the route in your browser.
