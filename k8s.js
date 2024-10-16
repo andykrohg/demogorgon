@@ -7,13 +7,39 @@ kc.loadFromCluster();
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
 async function createBot(username) {
-    let pod = k8s.loadYaml(fs.readFileSync(process.cwd() + "/mindcraft_pod_template.yaml").toString());
+    let botYaml = k8s.loadYaml(fs.readFileSync(process.cwd() + "/mindcraft_bot_template.yaml").toString());
+    let pod = botYaml.pod;
 
-    // TODO: Update pod with my own env variables for Model server and stuff here
+    pod.metadata.generateName = `${username}-`;
     pod.spec.containers[0].env.push({name: "USERNAME", value: username});
+    pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_HOST", value: process.env.MINECRAFT_SERVER_HOST});
+    pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_PORT", value: process.env.MINECRAFT_SERVER_PORT});
+    pod.spec.containers[0].env.push({name: "MODEL_SERVER_ENDPOINT", value: process.env.MODEL_SERVER_ENDPOINT});
+    pod.spec.containers[0].env.push({name: "MODEL", value: process.env.MODEL});
+    pod.spec.containers[0].env.push({name: "PROFILE", value: process.env.PROFILE});
+    pod.spec.containers[0].image = process.env.MINDCRAFT_IMAGE;
+
+    // Create pod and retrieve its name
     const res = await k8sApi.createNamespacedPod(namespace, pod);
     let matches = res.body.metadata.name.matchAll(/-(.[a-z0-9]+)$/g);
-    let botName = `${username}_${matches.next().value[1]}`;
+    let botGuid = matches.next().value[1];
+    let botName = `${username}_${botGuid}`;
+
+    // Add a label to the pod so we can find it later
+    await k8sApi.patchNamespacedPod(botName, namespace, {metadata: {labels: {botName: botName}}});
+
+    // Create routing to the pod so we can view prismarine viewer
+    let service = botYaml.service;
+    service.metadata.name = `${username}-${botGuid}`;
+    service.metadata.selector.botName = botName;
+    service.metadata.labels.botName = botName;
+    await k8sApi.createNamespacedService(namespace, service);
+
+    let route = botYaml.route;
+    route.metadata.name = `${username}-${botGuid}`;
+    route.spec.to.name = `${username}-${botGuid}`;
+    route.metadata.labels.botName = botName;
+    await k8sApi.create.createNamespacedIngress(namespace, route);
 
     console.log(`Bot ${botName} created`);
     return botName;

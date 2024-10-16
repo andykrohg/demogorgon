@@ -1,0 +1,40 @@
+pod:
+  kind: Pod
+  apiVersion: v1
+  metadata: {}
+  spec:
+    restartPolicy: Always
+    serviceAccountName: default
+    priority: 0
+    containers:
+      - resources: {}
+        name: mindcraft
+        ports:
+          - containerPort: 8081
+            protocol: TCP
+        imagePullPolicy: IfNotPresent
+        env: []
+service:
+  kind: Service
+  apiVersion: v1
+  metadata: {}
+  spec:
+    selector: {}
+    ports:
+      - protocol: TCP
+        port: 8081
+        targetPort: 8081
+        name: mindcraft
+route:
+  kind: Route
+  apiVersion: route.openshift.io/v1
+  metadata: {}
+  spec:
+    to:
+      kind: Service
+      weight: 100
+    port:
+      targetPort: 8081
+    tls:
+      termination: edge
+    wildcardPolicy: None
