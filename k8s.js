@@ -17,6 +17,7 @@ async function createBot(username) {
     pod.spec.containers[0].env.push({name: "USERNAME", value: username});
     pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_HOST", value: process.env.MINECRAFT_SERVER_HOST});
     pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_PORT", value: process.env.MINECRAFT_SERVER_PORT});
+    pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_VERSION", value: process.env.MINECRAFT_SERVER_VERSION});
     pod.spec.containers[0].env.push({name: "MODEL_SERVER_ENDPOINT", value: process.env.MODEL_SERVER_ENDPOINT});
     pod.spec.containers[0].env.push({name: "MODEL", value: process.env.MODEL});
     pod.spec.containers[0].env.push({name: "PROFILE", value: process.env.PROFILE});
