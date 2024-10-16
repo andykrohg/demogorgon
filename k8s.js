@@ -44,8 +44,8 @@ async function createBot(username) {
     // Create routing to the pod so we can view prismarine viewer
     let service = botYaml.service;
     service.metadata.name = `${username}-${botGuid}`;
-    service.metadata.selector.botName = botName;
     service.metadata.labels.botName = botName;
+    service.spec.selector.botName = botName;
     await k8sApi.createNamespacedService(namespace, service);
 
     let route = botYaml.route;
