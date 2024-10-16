@@ -1,7 +1,8 @@
 pod:
   kind: Pod
   apiVersion: v1
-  metadata: {}
+  metadata:
+    labels: {}
   spec:
     restartPolicy: Always
     serviceAccountName: default
@@ -17,7 +18,9 @@ pod:
 service:
   kind: Service
   apiVersion: v1
-  metadata: {}
+  metadata:
+    selector: {}
+    labels: {}
   spec:
     selector: {}
     ports:
@@ -28,7 +31,8 @@ service:
 route:
   kind: Route
   apiVersion: route.openshift.io/v1
-  metadata: {}
+  metadata:
+    labels: {}
   spec:
     to:
       kind: Service

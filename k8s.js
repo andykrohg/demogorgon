@@ -25,8 +25,18 @@ async function createBot(username) {
     let botGuid = matches.next().value[1];
     let botName = `${username}_${botGuid}`;
 
-    // Add a label to the pod so we can find it later
-    await k8sApi.patchNamespacedPod(botName, namespace, {metadata: {labels: {botName: botName}}});
+    // Add a label to the pod so we can route to it
+    const patch = [
+        {
+            op: 'replace',
+            path: '/metadata/labels',
+            value: {
+                botName: botName,
+            },
+        },
+    ];
+    const options = { headers: { 'Content-Type': k8s.PatchUtils.PATCH_FORMAT_JSON_PATCH } };
+    k8sApi.patchNamespacedPod(`${username}-${botGuid}`, namespace, patch, undefined, undefined, undefined, undefined, undefined, options);
 
     // Create routing to the pod so we can view prismarine viewer
     let service = botYaml.service;
@@ -39,7 +49,7 @@ async function createBot(username) {
     route.metadata.name = `${username}-${botGuid}`;
     route.spec.to.name = `${username}-${botGuid}`;
     route.metadata.labels.botName = botName;
-    await k8sApi.create.createNamespacedIngress(namespace, route);
+    await routeApi.createNamespacedCustomObject("route.openshift.io", "v1", namespace, "routes", route);
 
     console.log(`Bot ${botName} created`);
     return botName;
