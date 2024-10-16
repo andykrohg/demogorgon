@@ -6,6 +6,9 @@ const kc = new k8s.KubeConfig();
 kc.loadFromCluster();
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
+// need a separate api client for custom objects
+const routeApi = kc.makeApiClient(k8s.CustomObjectsApi);
+
 async function createBot(username) {
     let botYaml = k8s.loadYaml(fs.readFileSync(process.cwd() + "/mindcraft_bot_template.yaml").toString());
     let pod = botYaml.pod;
