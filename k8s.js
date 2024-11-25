@@ -18,8 +18,16 @@ async function createBot(username) {
     pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_HOST", value: process.env.MINECRAFT_SERVER_HOST});
     pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_PORT", value: process.env.MINECRAFT_SERVER_PORT});
     pod.spec.containers[0].env.push({name: "MINECRAFT_SERVER_VERSION", value: process.env.MINECRAFT_SERVER_VERSION});
-    pod.spec.containers[0].env.push({name: "MODEL_SERVER_ENDPOINT", value: process.env.MODEL_SERVER_ENDPOINT});
-    pod.spec.containers[0].env.push({name: "MODEL", value: process.env.MODEL});
+    pod.spec.containers[0].env.push({name: "CHAT_MODEL_SERVER", value: process.env.CHAT_MODEL_SERVER});
+    pod.spec.containers[0].env.push({name: "CHAT_MODEL_NAME", value: process.env.CHAT_MODEL_NAME});
+    pod.spec.containers[0].env.push({name: "CHAT_MODEL_API_KEY", value: process.env.CHAT_MODEL_API_KEY});
+    pod.spec.containers[0].env.push({name: "EMBEDDING_MODEL_SERVER", value: process.env.EMBEDDING_MODEL_SERVER});
+    pod.spec.containers[0].env.push({name: "EMBEDDING_MODEL_NAME", value: process.env.EMBEDDING_MODEL_NAME});
+    pod.spec.containers[0].env.push({name: "EMBEDDING_MODEL_API_KEY", value: process.env.EMBEDDING_MODEL_API_KEY});
+    pod.spec.containers[0].env.push({name: "ELASTICSEARCH_SERVER", value: process.env.ELASTICSEARCH_SERVER});
+    pod.spec.containers[0].env.push({name: "ELASTICSEARCH_USERNAME", value: process.env.ELASTICSEARCH_USERNAME});
+    pod.spec.containers[0].env.push({name: "ELASTICSEARCH_PASSWORD", value: process.env.ELASTICSEARCH_PASSWORD});
+    pod.spec.containers[0].env.push({name: "NODE_TLS_REJECT_UNAUTHORIZED", value: "0"});
     pod.spec.containers[0].env.push({name: "PROFILE", value: process.env.PROFILE});
     pod.spec.containers[0].image = process.env.MINDCRAFT_IMAGE;
 
