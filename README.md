@@ -24,8 +24,7 @@ oc new-app \
     -e ELASTICSEARCH_SERVER=http://localhost:9200 \
     -e ELASTICSEARCH_USERNAME=elastic \
     -e ELASTICSEARCH_PASSWORD=blah \
-    -e PROFILE=demojam
-    
+    -e PROFILE=demojam \
     quay.io/akrohg/demogorgon
 
 oc expose svc/demogorgon
